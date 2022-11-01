@@ -1,7 +1,6 @@
 const expr = require('express');
 
 const app = expr();
-const port = 80;
 
 app.get('/', function (req, res) {
     console.log(req);
@@ -18,6 +17,7 @@ app.post('/login', function (req, res) {
    return res.send("Post login");
 });
 
-app.listen(port, () => {
-    console.log('Listening on port: ' + 80);
-})
+let PORT = process.env.PORT || 3000;
+app.listen(PORT, ()=>{
+    console.log(`Server Up And Running At Port ${PORT}`);
+});
