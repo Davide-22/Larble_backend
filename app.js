@@ -3,6 +3,10 @@ const expr = require('express');
 const app = expr();
 const port = 3000;
 
+app.get('/', function (req, res) {
+    console.log(req);
+    return res.send("Hi");
+ });
 
 app.get('/login', function (req, res) {
     console.log(req);
