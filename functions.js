@@ -56,7 +56,7 @@ function signup(req,res){
                 res.send({status: true, msg:"ok"});
             })
             .catch(err => {
-                sendLog(err.toString());
+                console.log(err.toString());
                 if(err.code == '23505'){
                     return res.send({status: false, msg:"keyerror"});
                 }else{
