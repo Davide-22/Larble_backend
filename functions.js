@@ -44,5 +44,26 @@ function login(req,res){
             })
 }
 
-module.exports = {init_db, login}
+function signup(req,res){
+    console.log("POST /signup " + req.body.email);
+    password = req.body.password;
+    username = req.body.user;
+    email = req.body.email;
+    const sha256 = crypto.createHash('sha256');
+    const hash = sha256.update(password).digest('base64');
+    db.query('INSERT INTO users VALUES ($1, $2, $3)', [email, hash, username])
+            .then(result => {
+                res.send({status: true, msg:"ok"});
+            })
+            .catch(err => {
+                sendLog(err.toString());
+                if(err.code == '23505'){
+                    return res.send({status: false, msg:"keyerror"});
+                }else{
+                    return res.send({status: false, msg:"error"});
+                }      
+            })
+}
+
+module.exports = {init_db, login, signup}
 
