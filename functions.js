@@ -25,6 +25,7 @@ function login(req,res){
     const hash = sha256.update(password).digest('base64');
     client.query('SELECT * FROM Players WHERE email = $1 AND password = $2', [email, hash])
             .then(result => {
+                console.log(result);
                 if(result.length > 0){
                     const d = new Date();
                     let data = {
@@ -32,7 +33,7 @@ function login(req,res){
                         time: d.toUTCString()
                     }
                     const token = jwt.sign(data, "testkey");
-                    res.send({status: true, msg: token});
+                    res.send({status: true, msg: token, username: result.rows[0].username});
                 }else{
                     return res.send({status: false, msg:"wrong email or password"});
                 }
@@ -51,14 +52,14 @@ function signup(req,res){
     email = req.body.email;
     const sha256 = crypto.createHash('sha256');
     const hash = sha256.update(password).digest('base64');
-    db.query('INSERT INTO Players VALUES ($1, $2, $3)', [email, hash, username])
+    client.query('INSERT INTO Players(email, password, username) VALUES ($1, $2, $3)', [email, hash, username])
             .then(result => {
                 res.send({status: true, msg:"ok"});
             })
             .catch(err => {
                 console.log(err.toString());
                 if(err.code == '23505'){
-                    return res.send({status: false, msg:"keyerror"});
+                    return res.send({status: false, msg:"user already exists"});
                 }else{
                     return res.send({status: false, msg:"error"});
                 }      
@@ -66,5 +67,5 @@ function signup(req,res){
 }
 
 
-module.exports = {init_db, login, signup, a}
+module.exports = {init_db, login, signup}
 

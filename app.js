@@ -1,6 +1,5 @@
 const expr = require('express');
 const f = require('./functions');
-const { Client } = require('pg');
 
 const app = expr();
 
