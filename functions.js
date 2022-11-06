@@ -25,8 +25,8 @@ function login(req,res){
     const hash = sha256.update(password).digest('base64');
     client.query('SELECT * FROM Players WHERE email = $1 AND password = $2', [email, hash])
             .then(result => {
-                console.log(result);
-                if(result.length > 0){
+                console.log(result.rows);
+                if(result.rows.length > 0){
                     const d = new Date();
                     let data = {
                         email: email,
