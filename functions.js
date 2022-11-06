@@ -1,6 +1,7 @@
 const { Client } = require('pg');
 const dotenv = require("dotenv");
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 dotenv.config();
 const client = init_db();
