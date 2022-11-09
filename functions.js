@@ -2,7 +2,7 @@ const { Client } = require('pg');
 const dotenv = require("dotenv");
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-import {MultiplayerGame} from './multiplayer_game.js';
+//import {MultiplayerGame} from './multiplayer_game.js';
 
 dotenv.config();
 const client = init_db();
@@ -121,7 +121,7 @@ function createMultiplayerGame(req, res){
             break; 
         }
     }
-    const game = new MultiplayerGame(email, null);
+    //const game = new MultiplayerGame(email, null);
     multiplayer_games['game_code'] = game;
     return res.send({status: true, msg: game_code});
 
