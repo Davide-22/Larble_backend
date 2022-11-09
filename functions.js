@@ -49,7 +49,7 @@ function login(req,res){
 function signup(req,res){
     console.log("POST /signup " + req.body.email);
     password = req.body.password;
-    username = req.body.user;
+    username = req.body.username;
     email = req.body.email;
     const sha256 = crypto.createHash('sha256');
     const hash = sha256.update(password).digest('base64');
