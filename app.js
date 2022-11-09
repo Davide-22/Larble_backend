@@ -17,6 +17,14 @@ app.post('/signup',jsonParser, function (req, res) {
     f.signup(req,res);
 });
 
+app.post('/verify',jsonParser, function(req,res) {
+    f.verify(req, res);
+})
+
+app.post('/create_multiplayer_game',jsonParser, function(req,res) {
+    f.createMultiplayerGame(req, res);
+})
+
 let PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=>{
     console.log(`Server Up And Running At Port ${PORT}`);
