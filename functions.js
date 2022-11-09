@@ -2,7 +2,7 @@ const { Client } = require('pg');
 const dotenv = require("dotenv");
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-import {MultiplayerGame} from './multiplayer_game';
+import {MultiplayerGame} from './multiplayer_game.js';
 
 dotenv.config();
 const client = init_db();
