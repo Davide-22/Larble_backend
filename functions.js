@@ -74,8 +74,10 @@ function verify(req,res){
     try{
         const decode = jwt.verify(token, 'testkey');
         email = decode.email;
+        console.log(email)
         client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {
+                console.log(result)
                 if(result.length > 0) return res.send({status: true, msg: "ok"});
                 else res.send({status: false, msg: "email not in database"});
             })
