@@ -1,4 +1,4 @@
-export class MultiplayerGame {
+class MultiplayerGame {
     
     constructor(player1, player2) {
         this.player1 = player1;
@@ -24,4 +24,8 @@ export class MultiplayerGame {
         this.y2 = y;
     }
 
-  }
+}
+
+module.exports = {
+    MultiplayerGame
+}
