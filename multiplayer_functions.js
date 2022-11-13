@@ -10,7 +10,7 @@ function createMultiplayerGame(req, res, client){
     try{
         const decode = jwt.verify(token, 'testkey');
         email = decode.email;
-        db.query('SELECT * FROM users WHERE email = $1', [email])
+        client.query('SELECT * FROM users WHERE email = $1', [email])
             .then(result => {
                 if(result.length == 0) return;
             })
