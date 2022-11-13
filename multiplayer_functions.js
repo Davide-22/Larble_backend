@@ -16,11 +16,11 @@ function createMultiplayerGame(req, res, client){
             })
             .catch(err => {
                 console.log(err.toString());
-                return
+                return res.send({status: false, msg:"error"});
             })
     }catch(error) {
         console.log(error.toString());
-        return
+        return res.send({status: false, msg:"error"});
     }
     
     while(true){
@@ -48,6 +48,15 @@ function checkForPlayer2(req, res){
     } 
 }
 
+function joinGame(req, res){
+    game_code = req.body.game_code;
+    if(game_code in game_codes){
+        multiplayer_games[game_code].setPlayer2(req.body.email);
+    }else{
+        return res.send({status: false, msg: "wrong code"});
+    }
+}
+
 function handleMultiplayerGame(req, res){
     game_code = req.body.game_code;
     email = req.body.email;
@@ -66,5 +75,6 @@ function handleMultiplayerGame(req, res){
 module.exports = {
     createMultiplayerGame, 
     handleMultiplayerGame,
-    checkForPlayer2
+    checkForPlayer2,
+    joinGame
 }

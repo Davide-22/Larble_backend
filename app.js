@@ -39,9 +39,21 @@ app.post('/verify',jsonParser, function(req,res) {
     f.verify(req, res, client);
 })
 
+/*MULTIPLAYER*/
+
 app.post('/create_multiplayer_game',jsonParser, function(req,res) {
     multiplayer.createMultiplayerGame(req, res, client);
 })
+
+app.post('/join_game',jsonParser, function(req,res) {
+    multiplayer.joinGame(req, res, client);
+})
+
+app.post('/check_for_player2',jsonParser, function(req,res) {
+    multiplayer.checkForPlayer2(req, res, client);
+})
+
+/*==========*/
 
 let PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=>{

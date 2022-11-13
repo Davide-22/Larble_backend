@@ -14,6 +14,15 @@ class MultiplayerGame {
         return this.player2;
     }
 
+    setPlayer1(player){
+        this.player1 = player;
+    }
+
+    setPlayer2(player){
+        this.player2 = player;
+    }
+
+
     setPlayer1Position(x,y){
         this.x1 = x;
         this.y1 = y;
