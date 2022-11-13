@@ -10,9 +10,24 @@ function createMultiplayerGame(req, res, client){
     try{
         const decode = jwt.verify(token, 'testkey');
         email = decode.email;
-        client.query('SELECT * FROM users WHERE email = $1', [email])
+        client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {
-                if(result.length == 0) return;
+                if(result.length != 0) {
+                    while(true){
+                        game_code=Math.floor(
+                            Math.random() *(99999) + 10000
+                        );
+                        if(!game_codes.includes(game_code)){
+                            game_codes.push(game_code);
+                            break; 
+                        }
+                    }
+                    const game = new multiplayer.MultiplayerGame(email, null);
+                    multiplayer_games[game_code] = game;
+                    return res.send({status: true, msg: game_code});
+                }else{
+                    return res.send({status: false, msg:"error"});
+                }
             })
             .catch(err => {
                 console.log(err.toString());
@@ -23,19 +38,7 @@ function createMultiplayerGame(req, res, client){
         return res.send({status: false, msg:"error"});
     }
     
-    while(true){
-        game_code=Math.floor(
-            Math.random() *(99999) + 10000
-          );
-
-        if(!game_codes.includes(game_code)){
-            game_codes.push(game_code);
-            break; 
-        }
-    }
-    const game = new multiplayer.MultiplayerGame(email, null);
-    multiplayer_games[game_code] = game;
-    return res.send({status: true, msg: game_code});
+    
 
 }
 
