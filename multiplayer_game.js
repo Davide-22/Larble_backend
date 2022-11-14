@@ -4,6 +4,7 @@ class MultiplayerGame {
         this.player1 = player1;
         this.player2 = player2;
         this.usernamePlayer2 = null;
+        this.checkForPlayer2Time = Date.now();
     }
 
     getPlayer1(){
@@ -16,6 +17,10 @@ class MultiplayerGame {
 
     setUsernamePlayer2(usernamePlayer2){
         this.usernamePlayer2 = usernamePlayer2;
+    }
+
+    setcheckForPlayer2Time(date){
+        this.checkForPlayer2Time = date;
     }
 
     setPlayer1(player){
