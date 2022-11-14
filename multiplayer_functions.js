@@ -1,5 +1,10 @@
 const jwt = require('jsonwebtoken');
 var multiplayer = require('./multiplayer_game');
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+KEY = process.env.PLAYERS_KEY
 
 var game_codes = []
 var multiplayer_games = {}
@@ -8,7 +13,7 @@ function createMultiplayerGame(req, res, client){
 
     token = req.body.token;
     try{
-        const decode = jwt.verify(token, 'testkey');
+        const decode = jwt.verify(token, KEY);
         email = decode.email;
         client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {
@@ -54,7 +59,7 @@ function checkForPlayer2(req, res){
 
 function joinGame(req, res){
     try{
-        const decode = jwt.verify(token, 'testkey');
+        const decode = jwt.verify(token, KEY);
         email = decode.email;
         client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {

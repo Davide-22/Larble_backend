@@ -1,6 +1,10 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const dotenv = require("dotenv");
 
+dotenv.config();
+
+KEY = process.env.PLAYERS_KEY
 
 function login(req,res,client){
     console.log("POST /login " + req.body.email);
@@ -17,7 +21,7 @@ function login(req,res,client){
                         email: email,
                         time: d.toUTCString()
                     }
-                    const token = jwt.sign(data, "testkey");
+                    const token = jwt.sign(data, KEY);
                     res.send({status: true, msg: token, username: result.rows[0].username});
                 }else{
                     return res.send({status: false, msg:"wrong email or password"});
@@ -55,7 +59,7 @@ function verify(req,res,client){
     console.log("POST /verify ");
     token = req.body.token;
     try{
-        const decode = jwt.verify(token, 'testkey');
+        const decode = jwt.verify(token, KEY);
         email = decode.email;
         client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {
