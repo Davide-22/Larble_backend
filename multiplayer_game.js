@@ -3,7 +3,7 @@ class MultiplayerGame {
     constructor(player1, player2) {
         this.player1 = player1;
         this.player2 = player2;
-
+        this.usernamePlayer2 = null;
     }
 
     getPlayer1(){
@@ -12,6 +12,10 @@ class MultiplayerGame {
 
     getPlayer2(){
         return this.player2;
+    }
+
+    setUsernamePlayer2(usernamePlayer2){
+        this.usernamePlayer2 = usernamePlayer2;
     }
 
     setPlayer1(player){

@@ -26,6 +26,7 @@ function createMultiplayerGame(req, res, client){
                     multiplayer_games[game_code] = game;
                     return res.send({status: true, msg: game_code});
                 }else{
+                    console.log("[createMultiplayerGame] Player not found")
                     return res.send({status: false, msg:"error"});
                 }
             })
@@ -52,11 +53,33 @@ function checkForPlayer2(req, res){
 }
 
 function joinGame(req, res){
-    game_code = req.body.game_code;
-    if(game_code in game_codes){
-        multiplayer_games[game_code].setPlayer2(req.body.email);
-    }else{
-        return res.send({status: false, msg: "wrong code"});
+    try{
+        const decode = jwt.verify(token, 'testkey');
+        email = decode.email;
+        client.query('SELECT * FROM Players WHERE email = $1', [email])
+            .then(result => {
+                if(result.length != 0) {
+                    game_code = req.body.game_code;
+                    if(game_code in game_codes){
+                        multiplayer_games[game_code].setUsernamePlayer2(result.rows[0].username);
+                        multiplayer_games[game_code].setPlayer2(email);
+                        return res.send({status: true, msg: "ok"});
+                    }else{
+                        console.log("[joinGame] Wrong code");
+                        return res.send({status: false, msg: "wrong code"});
+                    }
+                }else{
+                    console.log("[joinGame] Player not found");
+                    return res.send({status: false, msg:"error"});
+                }
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
+            })
+    }catch(error) {
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
     }
 }
 

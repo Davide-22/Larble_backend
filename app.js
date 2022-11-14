@@ -46,7 +46,7 @@ app.post('/create_multiplayer_game',jsonParser, function(req,res) {
 })
 
 app.post('/join_game',jsonParser, function(req,res) {
-    multiplayer.joinGame(req, res, client);
+    multiplayer.joinGame(req, res);
 })
 
 app.post('/check_for_player2',jsonParser, function(req,res) {
