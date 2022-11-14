@@ -64,7 +64,7 @@ function joinGame(req, res, client){
         client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {
                 if(result.length != 0) {
-                    game_code = req.body.game_code;
+                    game_code = parseInt(req.body.game_code, 10);
                     console.log("[joinGame] game_code: " + game_code);
                     console.log(game_codes);
                     if(game_code in game_codes){
