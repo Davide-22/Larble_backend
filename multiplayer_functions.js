@@ -66,17 +66,8 @@ function joinGame(req, res, client){
                 if(result.length != 0) {
                     game_code = parseInt(req.body.game_code, 10);
                     console.log("[joinGame] game_code: " + game_code);
-                    console.log(game_code);
-                    console.log(typeof game_code);
-                    console.log(game_codes);
-                    console.log(game_codes[0]);
-                    console.log(typeof game_codes[0]);
-                    console.log("game_codes[0] == game_code:");
-                    console.log(game_codes[0] == game_code);
-                    console.log("game_code in game_codes:");
-                    console.log(game_code in game_codes);
                     
-                    if(game_code in game_codes){
+                    if(game_codes.includes(game_code)){
                         multiplayer_games[game_code].setUsernamePlayer2(result.rows[0].username);
                         multiplayer_games[game_code].setPlayer2(email);
                         return res.send({status: true, msg: "ok"});
