@@ -57,7 +57,7 @@ function checkForPlayer2(req, res){
     } 
 }
 
-function joinGame(req, res){
+function joinGame(req, res, client){
     token = req.body.token;
     try{
         const decode = jwt.verify(token, KEY);
