@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-var multiplayer = require('./multiplayer_game');
+const multiplayer = require('./multiplayer_game');
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -105,9 +105,52 @@ function handleMultiplayerGame(req, res){
     }
 }
 
+function deleteGame(req, res, client){
+    token = req.body.token;
+    try{
+        const decode = jwt.verify(token, KEY);
+        email = decode.email;
+        client.query('SELECT * FROM Players WHERE email = $1', [email])
+            .then(result => {
+                if(result.length != 0) {
+                    game_code = req.body.game_code;
+                    email = req.body.email;
+                    game = multiplayer_games[game_code];
+                    if(game == undefined){
+                        console.log("[deleteGame] wrong code");
+                        return res.send({status: false, msg:"error"});
+                    }
+                    if(game.getPlayer1() == email){
+                        game_codes.splice(game_codes.indexOf(game_code), 1);
+                        delete multiplayer_games.game_code;
+                        console.log(game_codes);
+                        console.log(multiplayer_games);
+                    }else{
+                        console.log("[deleteGame] " + email + " is trying to delete a game that don't own");
+                        return res.send({status: false, msg:"error"});
+                    }
+                }else{
+                    console.log("Player not found");
+                }
+                
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
+            })
+    }catch(error) {
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
+    }
+
+
+    
+}
+
 module.exports = {
     createMultiplayerGame, 
     handleMultiplayerGame,
     checkForPlayer2,
-    joinGame
+    joinGame,
+    deleteGame
 }

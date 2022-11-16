@@ -53,6 +53,10 @@ app.post('/check_for_player2',jsonParser, function(req,res) {
     multiplayer.checkForPlayer2(req, res, client);
 })
 
+app.post('/delete_game',jsonParser, function(req,res) {
+    multiplayer.deleteGame(req, res, client);
+})
+
 /*==========*/
 
 let PORT = process.env.PORT || 3000;
