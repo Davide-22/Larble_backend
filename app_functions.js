@@ -90,8 +90,7 @@ function changePassword(req, res, client) {
         const hash2 = sha256_2.update(oldpassword).digest('base64');
         client.query('SELECT password FROM Players WHERE email = $1', [email])
             .then(result => {
-                console.log(result);
-                if(result[0].password == hash2){
+                if(result.rows[0].password == hash2){
                     client.query('UPDATE Players SET password=$1 WHERE email=$2', [hash,email,hash2])
                     .then(result1 => {
                         return res.send({status: true, msg: "ok"});
