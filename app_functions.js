@@ -1,7 +1,6 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const dotenv = require("dotenv");
-const { password } = require('pg/lib/defaults');
 
 dotenv.config();
 
