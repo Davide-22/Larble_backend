@@ -76,10 +76,48 @@ function verify(req,res,client){
     }
 }
 
+function changePassword(req, res, client) {
+    console.log("POST /change_password");
+    oldpassword = req.body.oldpassword;
+    password = req.body.password;
+    token = req.body.token;
+    try{
+        const decode = jwt.verify(token, KEY);
+        const email = decode.email;
+        const sha256 = crypto.createHash('sha256');
+        const hash = sha256.update(password).digest('base64');
+        const sha256_2 = crypto.createHash('sha256');
+        const hash2 = sha256_2.update(oldpassword).digest('base64');
+        client.query('SELECT password FROM Players WHERE email = $1', [email])
+            .then(result => {
+                if(result[0].password == hash2){
+                    client.query('UPDATE Players SET password=$1 WHERE email=$2', [hash,email,hash2])
+                    .then(result1 => {
+                        return res.send({status: true, msg: "ok"});
+                    })
+                    .catch(err1 => {
+                        console.log(err1.toString());
+                        return res.send({status: false, msg:"error"});    
+                    })
+                }else{
+                    return res.send({status: false, msg:"wrong password"});
+                }
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});    
+            })
+
+    }catch(error){
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
+    }
+}
 
 module.exports = {
     login, 
     signup,
-    verify
+    verify,
+    changePassword
 }
 

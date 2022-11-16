@@ -126,7 +126,7 @@ function deleteGame(req, res, client){
                         console.log(game_codes);
                         console.log(multiplayer_games);
                     }else{
-                        console.log("[deleteGame] " + email + " is trying to delete a game that don't own");
+                        console.log("[deleteGame] " + email + " is trying to delete a game that doesn't own");
                         return res.send({status: false, msg:"error"});
                     }
                 }else{

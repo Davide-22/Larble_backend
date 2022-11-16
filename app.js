@@ -39,6 +39,10 @@ app.post('/verify',jsonParser, function(req,res) {
     f.verify(req, res, client);
 })
 
+app.post('/change_password',jsonParser, function (req, res) {
+    f.changePassword(req, res, client);
+})
+
 /*MULTIPLAYER*/
 
 app.post('/create_multiplayer_game',jsonParser, function(req,res) {
