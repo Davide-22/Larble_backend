@@ -122,7 +122,7 @@ function deleteGame(req, res, client){
                     if(game.getPlayer1() == email){
                         game_codes.splice(game_codes.indexOf(game_code), 1);
                         console.log(multiplayer_games);
-                        delete multiplayer_games["game_code"];
+                        delete multiplayer_games[game_code];
                         console.log(game_codes);
                         console.log(multiplayer_games);
                     }else{
