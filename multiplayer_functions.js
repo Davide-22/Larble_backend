@@ -116,7 +116,7 @@ function deleteGame(req, res, client){
                     game_code = req.body.game_code;
                     email = req.body.email;
                     game = multiplayer_games[game_code];
-                    console.log(game);
+                    console.log(game + " " + email);
                     if(game == undefined){
                         console.log("[deleteGame] wrong code");
                         return res.send({status: false, msg:"error"});
