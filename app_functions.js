@@ -41,7 +41,8 @@ function signup(req,res,client){
     email = req.body.email;
     const sha256 = crypto.createHash('sha256');
     const hash = sha256.update(password).digest('base64');
-    client.query('INSERT INTO Players(email, password, username) VALUES ($1, $2, $3)', [email, hash, username])
+    client.query('INSERT INTO Players(email, password, username, wins, total_games, score) VALUES ($1, $2, $3, $4, $5, $6)',
+                  [email, hash, username, 0, 0, 0])
             .then(result => {
                 res.send({status: true, msg:"ok"});
             })
@@ -114,10 +115,41 @@ function changePassword(req, res, client) {
     }
 }
 
+function playerInfo(req, res, client){
+    console.log("POST /playerInfo ");
+    token = req.body.token;
+    try{
+        const decode = jwt.verify(token, KEY);
+        email = decode.email;
+        client.query('SELECT * FROM Players WHERE email = $1', [email])
+            .then(result => {
+                if(result.rows.length > 0){
+                    return res.send({
+                        status : true,
+                        wins: result.rows[0].wins, 
+                        total_games: result.rows[0].total_games,
+                        score: result.rows[0].score,
+                        profile_picture: result.rows[0].profile_picture
+                    });
+                } 
+                else res.send({status: false, msg: "user not found"});
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg: "error"});
+            })
+    }catch(error) {
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
+    }
+}
+
+
 module.exports = {
     login, 
     signup,
     verify,
-    changePassword
+    changePassword,
+    playerInfo
 }
 
