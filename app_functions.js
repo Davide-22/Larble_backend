@@ -124,7 +124,7 @@ function changeUsername(req, res, client) {
         const email = decode.email;
         client.query('UPDATE Players SET username=$1 WHERE email=$2', [username,email])
             .then(result1 => {
-                return res.send({status: true, msg: "ok", username: username});
+                return res.send({status: true, msg: "ok"});
             })
             .catch(err1 => {
                 console.log(err1.toString());
