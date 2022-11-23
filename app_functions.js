@@ -126,6 +126,7 @@ function playerInfo(req, res, client){
                 if(result.rows.length > 0){
                     return res.send({
                         status : true,
+                        email: email,
                         wins: result.rows[0].wins, 
                         total_games: result.rows[0].total_games,
                         score: result.rows[0].score,
