@@ -43,9 +43,14 @@ app.post('/change_password',jsonParser, function (req, res) {
     f.changePassword(req, res, client);
 });
 
+app.post('change_username',jsonParser, function (req, res) {
+    f.changeUsername(req, res, client);
+});
+
 app.post('/player_info',jsonParser, function (req, res) {
     f.playerInfo(req, res, client);
 });
+
 
 /*MULTIPLAYER*/
 

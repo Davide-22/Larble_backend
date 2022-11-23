@@ -115,6 +115,28 @@ function changePassword(req, res, client) {
     }
 }
 
+function changeUsername(req, res, client) {
+    console.log("POST /change_username");
+    username = req.body.username;
+    token = req.body.token;
+    try{
+        const decode = jwt.verify(token, KEY);
+        const email = decode.email;
+        client.query('UPDATE Players SET username=$1 WHERE email=$2', [username,email])
+            .then(result1 => {
+                return res.send({status: true, msg: "ok", username: username});
+            })
+            .catch(err1 => {
+                console.log(err1.toString());
+                return res.send({status: false, msg:"error"});    
+            })
+
+    }catch(error){
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
+    }
+}
+
 function playerInfo(req, res, client){
     console.log("POST /playerInfo ");
     token = req.body.token;
@@ -151,6 +173,7 @@ module.exports = {
     signup,
     verify,
     changePassword,
+    changeUsername,
     playerInfo
 }
 
