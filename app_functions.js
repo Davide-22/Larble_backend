@@ -137,7 +137,7 @@ function changeUsername(req, res, client) {
     }
 }
 
-function changeProfilePicture(){
+function changeProfilePicture(req, res, client){
     console.log("POST /change_profile_picture");
     profile_picture = req.body.profile_picture;
     token = req.body.token;
