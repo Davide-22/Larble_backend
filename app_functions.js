@@ -137,6 +137,27 @@ function changeUsername(req, res, client) {
     }
 }
 
+function changeProfilePicture(){
+    console.log("POST /change_profile_picture");
+    profile_picture = req.body.profile_picture;
+    token = req.body.token;
+    try{
+        const decode = jwt.verify(token, KEY);
+        const email = decode.email;
+        client.query('UPDATE Players SET profile_picture=$1 WHERE email=$2', [profile_picture,email])
+            .then(result1 => {
+                return res.send({status: true, msg: "ok"});
+            })
+            .catch(err1 => {
+                console.log(err1.toString());
+                return res.send({status: false, msg:"error"});    
+            })
+    }catch(error){
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
+    }
+}
+
 function playerInfo(req, res, client){
     console.log("POST /playerInfo ");
     token = req.body.token;
@@ -174,6 +195,7 @@ module.exports = {
     verify,
     changePassword,
     changeUsername,
+    changeProfilePicture,
     playerInfo
 }
 

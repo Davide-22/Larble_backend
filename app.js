@@ -47,9 +47,15 @@ app.post('/change_username',jsonParser, function (req, res) {
     f.changeUsername(req, res, client);
 });
 
+app.post('/change_profile_picture',jsonParser, function (req, res) {
+    f.changeProfilePicture(req, res, client);
+});
+
 app.post('/player_info',jsonParser, function (req, res) {
     f.playerInfo(req, res, client);
 });
+
+
 
 
 /*MULTIPLAYER*/
