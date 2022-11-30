@@ -37,21 +37,44 @@ app.post('/signup',jsonParser, function (req, res) {
 
 app.post('/verify',jsonParser, function(req,res) {
     f.verify(req, res, client);
-})
+});
+
+app.post('/change_password',jsonParser, function (req, res) {
+    f.changePassword(req, res, client);
+});
+
+app.post('/change_username',jsonParser, function (req, res) {
+    f.changeUsername(req, res, client);
+});
+
+app.post('/change_profile_picture',jsonParser, function (req, res) {
+    f.changeProfilePicture(req, res, client);
+});
+
+app.post('/player_info',jsonParser, function (req, res) {
+    f.playerInfo(req, res, client);
+});
+
+
+
 
 /*MULTIPLAYER*/
 
 app.post('/create_multiplayer_game',jsonParser, function(req,res) {
     multiplayer.createMultiplayerGame(req, res, client);
-})
+});
 
 app.post('/join_game',jsonParser, function(req,res) {
     multiplayer.joinGame(req, res, client);
-})
+});
 
 app.post('/check_for_player2',jsonParser, function(req,res) {
     multiplayer.checkForPlayer2(req, res, client);
-})
+});
+
+app.post('/delete_game',jsonParser, function(req,res) {
+    multiplayer.deleteGame(req, res, client);
+});
 
 app.post('/handle_multiplayer_game',jsonParser, function(req,res) {
     multiplayer.handleMultiplayerGame(req, res, client);
