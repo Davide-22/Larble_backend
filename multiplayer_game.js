@@ -5,6 +5,10 @@ class MultiplayerGame {
         this.player2 = player2;
         this.usernamePlayer2 = null;
         this.checkForPlayer2Time = Date.now();
+        this.x1 = 0;
+        this.y1 = 0;
+        this.x2 = 0;
+        this.y2 = 0;
     }
 
     getPlayer1(){
@@ -42,6 +46,13 @@ class MultiplayerGame {
         this.y2 = y;
     }
 
+    getPlayer1Coord(){
+        return {x : this.x1, y: this.y1}
+    }
+
+    getPlayer2Coord(){
+        return {x: this.x2, y : this.y2}    
+    }
 }
 
 module.exports = {

@@ -91,17 +91,29 @@ function joinGame(req, res, client){
 }
 
 function handleMultiplayerGame(req, res){
-    game_code = req.body.game_code;
-    email = req.body.email;
-    game = multiplayer_games[game_code];
-    x = req.body.x;
-    y = req.body.y;
-    if(email == game.getPlayer1()){
-
-    }else if(email == game.getPlayer2()){
-
-    }else{
-        console.log("error handleMultiplayerGame");
+    token = req.body.token;
+    try{
+        const decode = jwt.verify(token, KEY);
+        email = decode.email;
+        game_code = req.body.game_code;
+        game = multiplayer_games[game_code];
+        x = req.body.x;
+        y = req.body.y;
+        if(email == game.getPlayer1()){
+            game.setPlayer1Position(x,y);
+            coord = game.getPlayer1Coord();
+            return res.send({status: true, x : coord.x, y : coord.y });
+        }else if(email == game.getPlayer2()){
+            game.setPlayer2Position(x,y);
+            coord = game.getPlayer2Coord();
+            return res.send({status: true, x : coord.x, y : coord.y });
+        }else{
+            console.log("[handleMultiplayerGame] email error");
+            return res.send({status: false, msg:"error"});
+        }
+    }catch(error) {
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
     }
 }
 
