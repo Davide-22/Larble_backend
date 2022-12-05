@@ -95,12 +95,16 @@ function joinGame(req, res, client){
 function handleMultiplayerGame(req, res){
     token = req.body.token;
     try{
+        console.log(`token=${token}`);
         const decode = jwt.verify(token, KEY);
         email = decode.email;
         game_code = req.body.game_code;
+        console.log(`game_code=${game_code}`);
+        console.log(`email=${email}`);
         game = multiplayer_games[game_code];
         x = req.body.x;
         y = req.body.y;
+        console.log(`x=${x}, y=${y}`);
         if(email == game.getPlayer1()){
             game.setPlayer1Position(x,y);
             coord = game.getPlayer1Coord();

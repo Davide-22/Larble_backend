@@ -5,10 +5,10 @@ class MultiplayerGame {
         this.player2 = player2;
         this.usernamePlayer2 = null;
         this.checkForPlayer2Time = Date.now();
-        this.x1 = 0;
-        this.y1 = 0;
-        this.x2 = 0;
-        this.y2 = 0;
+        this.x1 = 0.0;
+        this.y1 = 0.0;
+        this.x2 = 0.0;
+        this.y2 = 0.0;
     }
 
     getPlayer1(){
