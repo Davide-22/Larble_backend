@@ -10,11 +10,11 @@ var game_codes = []
 var multiplayer_games = {}
 
 function createMultiplayerGame(req, res, client){
-
     token = req.body.token;
     try{
         const decode = jwt.verify(token, KEY);
         email = decode.email;
+        console.log(`[createMultiplayerGame] Creating Multiplayer game by ${email}`);
         client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {
                 if(result.length != 0) {
@@ -47,6 +47,7 @@ function createMultiplayerGame(req, res, client){
 }
 
 function checkForPlayer2(req, res){
+
     game = multiplayer_games[req.body.game_code];
     if(game.getPlayer2() == null){
         game.setcheckForPlayer2Time(Date.now());
@@ -65,7 +66,7 @@ function joinGame(req, res, client){
             .then(result => {
                 if(result.length != 0) {
                     game_code = parseInt(req.body.game_code, 10);
-                    console.log("[joinGame] game_code: " + game_code);
+                    console.log(`[joinGame] Joining game with game_code=${game_code}`);
                     
                     if(game_codes.includes(game_code)){
                         multiplayer_games[game_code].setUsernamePlayer2(result.rows[0].username);
@@ -133,16 +134,14 @@ function deleteGame(req, res, client){
                     }
                     if(game.getPlayer1() == email){
                         game_codes.splice(game_codes.indexOf(game_code), 1);
-                        console.log(multiplayer_games);
                         delete multiplayer_games[game_code];
-                        console.log(game_codes);
-                        console.log(multiplayer_games);
+                        console.log(`[deleteGame] Deleting game with code ${game_code}`); 
                     }else{
-                        console.log("[deleteGame] " + email + " is trying to delete a game that doesn't own");
+                        console.log(`[deleteGame] ${email} is trying to delete a game that doesn't own`);
                         return res.send({status: false, msg:"error"});
                     }
                 }else{
-                    console.log("Player not found");
+                    console.log("[deleteGame] Player not found");
                 }
                 
             })
