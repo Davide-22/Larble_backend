@@ -47,7 +47,7 @@ function createMultiplayerGame(req, res, client){
 }
 
 function checkForPlayer2(req, res){
-
+    console.log("[checkForPlayer2] Checking for player 2...");
     game = multiplayer_games[req.body.game_code];
     if(game.getPlayer2() == null){
         game.setcheckForPlayer2Time(Date.now());
