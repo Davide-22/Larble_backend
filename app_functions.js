@@ -188,6 +188,27 @@ function playerInfo(req, res, client){
     }
 }
 
+function getScoreboard(req, res, client){
+    console.log("POST /getScoreboard ");
+    token = req.body.token;
+    try{
+        const decode = jwt.verify(token, KEY);
+        email = decode.email;
+        client.query('SELECT username, wins FROM Players ORDER BY score DESC LIMIT 15', [])
+            .then(result => {
+                return res.send({
+                    scoreboard : result.rows
+                });
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg: "error"});
+            })
+    }catch(error) {
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
+    }
+}
 
 module.exports = {
     login, 
@@ -196,6 +217,7 @@ module.exports = {
     changePassword,
     changeUsername,
     changeProfilePicture,
-    playerInfo
+    playerInfo,
+    getScoreboard
 }
 
