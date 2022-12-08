@@ -107,11 +107,11 @@ function handleMultiplayerGame(req, res){
         console.log(`x=${x}, y=${y}`);
         if(email == game.getPlayer1()){
             game.setPlayer1Position(x,y);
-            coord = game.getPlayer1Coord();
+            coord = game.getPlayer2Coord();
             return res.send({status: true, x : coord.x, y : coord.y });
         }else if(email == game.getPlayer2()){
             game.setPlayer2Position(x,y);
-            coord = game.getPlayer2Coord();
+            coord = game.getPlayer1Coord();
             return res.send({status: true, x : coord.x, y : coord.y });
         }else{
             console.log("[handleMultiplayerGame] email error");
