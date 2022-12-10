@@ -70,6 +70,9 @@ function joinGame(req, res, client){
                     console.log(`[joinGame] Joining game with game_code=${game_code}`);
                     
                     if(game_codes.includes(game_code)){
+                        if(multiplayer_games[game_code].getPlayer2() != null){
+                            return res.send({status: false, msg: "game already started"});
+                        }
                         multiplayer_games[game_code].setUsernamePlayer2(result.rows[0].username);
                         multiplayer_games[game_code].setPlayer2(email);
                         return res.send({status: true, msg: "ok"});

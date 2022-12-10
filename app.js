@@ -55,8 +55,8 @@ app.post('/player_info',jsonParser, function (req, res) {
     f.playerInfo(req, res, client);
 });
 
-app.post('/get_scoreboard',jsonParser, function (req, res) {
-    f.getScoreboard(req, res, client);
+app.post('/get_leaderboard',jsonParser, function (req, res) {
+    f.getLeaderboard(req, res, client);
 });
 
 

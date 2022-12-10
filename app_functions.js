@@ -188,15 +188,16 @@ function playerInfo(req, res, client){
     }
 }
 
-function getScoreboard(req, res, client){
-    console.log("POST /getScoreboard ");
+function getLeaderboard(req, res, client){
+    console.log("POST /getLeaderboard ");
     token = req.body.token;
     try{
         const decode = jwt.verify(token, KEY);
         email = decode.email;
-        client.query('SELECT username, wins FROM Players ORDER BY score DESC LIMIT 15', [])
+        client.query('SELECT username, score, wins FROM Players ORDER BY score DESC LIMIT 15', [])
             .then(result => {
                 return res.send({
+                    status : true,
                     scoreboard : result.rows
                 });
             })
@@ -218,6 +219,6 @@ module.exports = {
     changeUsername,
     changeProfilePicture,
     playerInfo,
-    getScoreboard
+    getLeaderboard
 }
 
