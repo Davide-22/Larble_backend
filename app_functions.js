@@ -196,6 +196,7 @@ function getLeaderboard(req, res, client){
         email = decode.email;
         client.query('SELECT username, score, wins FROM Players ORDER BY score DESC LIMIT 15', [])
             .then(result => {
+                console.log(result);
                 return res.send({
                     status : true,
                     scoreboard : result.rows
