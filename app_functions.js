@@ -198,7 +198,7 @@ function getLeaderboard(req, res, client){
             .then(result => {
                 tosend = {
                     status : true,
-                    scoreboard : result.rows
+                    leaderboard : result.rows
                 }
                 console.log(tosend)
                 return res.send(tosend);
