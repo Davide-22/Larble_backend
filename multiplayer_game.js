@@ -9,6 +9,8 @@ class MultiplayerGame {
         this.y1 = 0.0;
         this.x2 = 0.0;
         this.y2 = 0.0;
+        this.isPlayer1Win = false;
+        this.isPlayer2Win = false;
     }
 
     getPlayer1(){
@@ -52,6 +54,14 @@ class MultiplayerGame {
 
     getPlayer2Coord(){
         return {x: this.x2, y : this.y2}    
+    }
+
+    player1Win(){
+        this.isPlayer1Win = true;
+    }
+
+    player2Win(){
+        this.isPlayer2Win = true;
     }
 }
 

@@ -80,8 +80,14 @@ app.post('/delete_game',jsonParser, function(req,res) {
 
 app.post('/handle_multiplayer_game',jsonParser, function(req,res) {
     multiplayer.handleMultiplayerGame(req, res, client);
-})
+});
+
+app.post('/winning_game',jsonParser, function(req,res) {
+    multiplayer.winningGame(req, res);
+});
 /*==========*/
+
+return res.send({status: false, msg: "game already started"});
 
 let PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=>{

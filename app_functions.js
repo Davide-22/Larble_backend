@@ -49,7 +49,7 @@ function signup(req,res,client){
             .catch(err => {
                 console.log(err.toString());
                 if(err.code == '23505'){
-                    return res.send({status: false, msg:"user already exists"});
+                    return res.send({status: false, msg:"The user already exists"});
                 }else{
                     return res.send({status: false, msg:"error"});
                 }      
@@ -65,7 +65,7 @@ function verify(req,res,client){
         client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {
                 if(result.rows.length > 0) return res.send({status: true, msg: "ok"});
-                else res.send({status: false, msg: "email not in database"});
+                else res.send({status: false, msg: "Email not in database"});
             })
             .catch(err => {
                 console.log(err.toString());
@@ -221,6 +221,6 @@ module.exports = {
     changeUsername,
     changeProfilePicture,
     playerInfo,
-    getLeaderboard
+    getLeaderboard,
 }
 

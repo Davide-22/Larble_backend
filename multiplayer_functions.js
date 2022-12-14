@@ -71,14 +71,17 @@ function joinGame(req, res, client){
                     
                     if(game_codes.includes(game_code)){
                         if(multiplayer_games[game_code].getPlayer2() != null){
-                            return res.send({status: false, msg: "game already started"});
+                            return res.send({status: false, msg: "Game already started"});
+                        }
+                        if(multiplayer_games[game_code].getPlayer2() == email){
+                            return res.send({status: false, msg: "You can't play with yourself"});
                         }
                         multiplayer_games[game_code].setUsernamePlayer2(result.rows[0].username);
                         multiplayer_games[game_code].setPlayer2(email);
                         return res.send({status: true, msg: "ok"});
                     }else{
                         console.log("[joinGame] Wrong code");
-                        return res.send({status: false, msg: "wrong code"});
+                        return res.send({status: false, msg: "Wrong code"});
                     }
                 }else{
                     console.log("[joinGame] Player not found");
@@ -109,13 +112,19 @@ function handleMultiplayerGame(req, res){
         y = req.body.y;
         console.log(`x=${x}, y=${y}`);
         if(email == game.getPlayer1()){
+            if(game.isPlayer2Win){
+                return res.send({status: true, win: true});
+            }
             game.setPlayer1Position(x,y);
             coord = game.getPlayer2Coord();
-            return res.send({status: true, x : coord.x, y : coord.y });
+            return res.send({status: true, x : coord.x, y : coord.y, win : false });
         }else if(email == game.getPlayer2()){
+            if(game.isPlayer1Win){
+                return res.send({status: true, win: true});
+            }
             game.setPlayer2Position(x,y);
             coord = game.getPlayer1Coord();
-            return res.send({status: true, x : coord.x, y : coord.y });
+            return res.send({status: true, x : coord.x, y : coord.y, win : false  });
         }else{
             console.log("[handleMultiplayerGame] email error");
             return res.send({status: false, msg:"error"});
@@ -163,10 +172,32 @@ function deleteGame(req, res, client){
     }   
 }
 
+function winningGame(req, res){
+    token = req.body.token;
+    try{
+        const decode = jwt.verify(token, KEY);
+        email = decode.email;
+        game_code = req.body.game_code;
+        game = multiplayer_games[game_code];
+        if(email == game.getPlayer1()){
+            game.player1Win();
+        }else if(email == game.getPlayer2()){
+            game.player2Win();
+        }else{
+            return res.send({status: false, msg:"error"});
+        }
+        return res.send({status: true, msg:"ok"});
+    }catch(error) {
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
+    }   
+}
+
 module.exports = {
     createMultiplayerGame, 
     handleMultiplayerGame,
     checkForPlayer2,
     joinGame,
-    deleteGame
+    deleteGame,
+    winningGame
 }
