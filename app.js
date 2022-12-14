@@ -87,8 +87,6 @@ app.post('/winning_game',jsonParser, function(req,res) {
 });
 /*==========*/
 
-return res.send({status: false, msg: "game already started"});
-
 let PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=>{
     console.log(`Server Up And Running At Port ${PORT}`);
