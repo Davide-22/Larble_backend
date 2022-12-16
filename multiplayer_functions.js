@@ -172,7 +172,7 @@ function deleteGame(req, res, client){
     }   
 }
 
-function winningGame(req, res){
+function winningGame(req, res, client){
     token = req.body.token;
     try{
         const decode = jwt.verify(token, KEY);
@@ -181,11 +181,52 @@ function winningGame(req, res){
         game = multiplayer_games[game_code];
         if(email == game.getPlayer1()){
             game.player1Win();
+            client.query('UPDATE Players SET wins = wins+1, \
+                        total_games = total_games+1, \
+                        score = score+10 WHERE email = $1', [email])
+            .then(result => {
+                console.log(`[winningGame] ${email} won the game, wins, score and total_games updated`);
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
+            })
+            client.query('UPDATE Players SET total_games = total_games+1, \
+                        score = score-5 WHERE email = $1 AND score >= 5', [game.getPlayer2()])
+            .then(result => {
+                console.log(`[winningGame] ${game.getPlayer2()} lost the game, score and total_games updated`);
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
+            })
         }else if(email == game.getPlayer2()){
             game.player2Win();
+            client.query('UPDATE Players SET wins = wins+1, \
+                        total_games = total_games+1, \
+                        score = score+10 WHERE email = $1', [email])
+            .then(result => {
+                console.log(`[winningGame] ${email} won the game; wins, score and total_games updated`);
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
+            })
+            client.query('UPDATE Players SET total_games = total_games+1, \
+                        score = score-5 WHERE email = $1', [game.getPlayer1()])
+            .then(result => {
+                console.log(`[winningGame] ${game.getPlayer1()} lost the game; score and total_games updated`);
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
+            })
         }else{
             return res.send({status: false, msg:"error"});
         }
+        game_codes.splice(game_codes.indexOf(game_code), 1);
+        delete multiplayer_games[game_code];
+        console.log(`[deleteGame] Deleting game with code ${game_code}`); 
         return res.send({status: true, msg:"ok"});
     }catch(error) {
         console.log(error.toString());

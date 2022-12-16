@@ -83,7 +83,7 @@ app.post('/handle_multiplayer_game',jsonParser, function(req,res) {
 });
 
 app.post('/winning_game',jsonParser, function(req,res) {
-    multiplayer.winningGame(req, res);
+    multiplayer.winningGame(req, res, client);
 });
 /*==========*/
 
