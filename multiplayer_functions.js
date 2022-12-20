@@ -172,6 +172,43 @@ function deleteGame(req, res, client){
     }   
 }
 
+function deleteFinishedGame(req, res, client){
+    token = req.body.token;
+    try{
+        const decode = jwt.verify(token, KEY);
+        email = decode.email;
+        client.query('SELECT * FROM Players WHERE email = $1', [email])
+            .then(result => {
+                if(result.length != 0) {
+                    game_code = req.body.game_code;
+                    game = multiplayer_games[game_code];
+                    if(game == undefined){
+                        console.log("[deleteFinishedGame] wrong code");
+                        return res.send({status: false, msg:"error"});
+                    }
+                    if(game.isPlayer1Win == true || game.isPlayer2Win == true){
+                        game_codes.splice(game_codes.indexOf(game_code), 1);
+                        delete multiplayer_games[game_code];
+                        console.log(`[deleteFinishedGame] Deleting game with code ${game_code}`); 
+                    }else{
+                        console.log(`[deleteFinishedGame] ${email} is trying to delete a game that hasn't finished yet`);
+                        return res.send({status: false, msg:"error"});
+                    }
+                }else{
+                    console.log("[deleteFinishedGame] Player not found");
+                }
+                
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
+            })
+    }catch(error) {
+        console.log(error.toString());
+        return res.send({status: false, msg:"error"});
+    }   
+}
+
 function winningGame(req, res, client){
     token = req.body.token;
     try{
@@ -180,59 +217,53 @@ function winningGame(req, res, client){
         game_code = req.body.game_code;
         game = multiplayer_games[game_code];
         if(email == game.getPlayer1()){
+            winner = email
+            loser = game.getPlayer2()
             game.player1Win();
-            client.query('UPDATE Players SET wins = wins+1, \
-                        total_games = total_games+1, \
-                        score = score+10 WHERE email = $1', [email])
-            .then(result => {
-                console.log(`[winningGame] ${email} won the game, wins, score and total_games updated`);
-            })
-            .catch(err => {
-                console.log(err.toString());
-                return res.send({status: false, msg:"error"});
-            })
-            client.query('UPDATE Players SET total_games = total_games+1, \
-                        score = score-5 WHERE email = $1 AND score >= 5', [game.getPlayer2()])
-            .then(result => {
-                console.log(`[winningGame] ${game.getPlayer2()} lost the game, score and total_games updated`);
-            })
-            .catch(err => {
-                console.log(err.toString());
-                return res.send({status: false, msg:"error"});
-            })
         }else if(email == game.getPlayer2()){
-            game.player2Win();
-            client.query('UPDATE Players SET wins = wins+1, \
-                        total_games = total_games+1, \
-                        score = score+10 WHERE email = $1', [email])
-            .then(result => {
-                console.log(`[winningGame] ${email} won the game; wins, score and total_games updated`);
-            })
-            .catch(err => {
-                console.log(err.toString());
-                return res.send({status: false, msg:"error"});
-            })
-            client.query('UPDATE Players SET total_games = total_games+1, \
-                        score = score-5 WHERE email = $1', [game.getPlayer1()])
-            .then(result => {
-                console.log(`[winningGame] ${game.getPlayer1()} lost the game; score and total_games updated`);
-            })
-            .catch(err => {
-                console.log(err.toString());
-                return res.send({status: false, msg:"error"});
-            })
+            winner = game.getPlayer2()
+            loser = email
         }else{
             return res.send({status: false, msg:"error"});
         }
-        game_codes.splice(game_codes.indexOf(game_code), 1);
-        delete multiplayer_games[game_code];
-        console.log(`[deleteGame] Deleting game with code ${game_code}`); 
-        return res.send({status: true, msg:"ok"});
+            
+        client.query('UPDATE Players SET wins = wins+1, \
+                    total_games = total_games+1, \
+                    score = score+10 WHERE email = $1', [winner])
+        .then(result => {
+            console.log(`[winningGame] ${winner} won the game, wins, score and total_games updated`);
+        })
+        .catch(err => {
+            console.log(err.toString());
+            return res.send({status: false, msg:"error"});
+        })
+        client.query('SELECT score FROM Players WHERE email=$1', [loser])
+        .then(result => {
+            if(result.rows[0].score >= 5){
+                client.query('UPDATE Players SET total_games = total_games+1, \
+                    score = score-5 WHERE email = $1', [loser])
+                .then(result => {
+                    console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
+                })
+            }else{
+                client.query('UPDATE Players SET total_games = total_games+1 \
+                            WHERE email = $1', [loser])
+                .then(result => {
+                    console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
+                })                  
+            }
+        }) 
+        .catch(err => {
+            console.log(err.toString());
+            return res.send({status: false, msg:"error"});
+        })
     }catch(error) {
         console.log(error.toString());
         return res.send({status: false, msg:"error"});
     }   
 }
+
+
 
 module.exports = {
     createMultiplayerGame, 
@@ -240,5 +271,6 @@ module.exports = {
     checkForPlayer2,
     joinGame,
     deleteGame,
+    deleteFinishedGame,
     winningGame
 }

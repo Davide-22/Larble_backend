@@ -84,6 +84,10 @@ app.post('/handle_multiplayer_game',jsonParser, function(req,res) {
 
 app.post('/winning_game',jsonParser, function(req,res) {
     multiplayer.winningGame(req, res, client);
+});deleteFinishedGame
+
+app.post('/delete_finished_game',jsonParser, function(req,res) {
+    multiplayer.deleteFinishedGame(req, res, client);
 });
 /*==========*/
 
