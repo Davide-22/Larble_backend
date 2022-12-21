@@ -95,3 +95,6 @@ let PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=>{
     console.log(`Server Up And Running At Port ${PORT}`);
 });
+
+
+setInterval(multiplayer.checkForLeftGames(), 5000);

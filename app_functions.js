@@ -213,6 +213,8 @@ function getLeaderboard(req, res, client){
     }
 }
 
+
+
 module.exports = {
     login, 
     signup,
@@ -221,6 +223,6 @@ module.exports = {
     changeUsername,
     changeProfilePicture,
     playerInfo,
-    getLeaderboard,
+    getLeaderboard
 }
 

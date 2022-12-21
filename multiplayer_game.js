@@ -4,7 +4,7 @@ class MultiplayerGame {
         this.player1 = player1;
         this.player2 = player2;
         this.usernamePlayer2 = null;
-        this.checkForPlayer2Time = Date.now();
+        this.lastAccess = Date.now();
         this.x1 = 0.0;
         this.y1 = 0.0;
         this.x2 = 0.0;
@@ -21,12 +21,12 @@ class MultiplayerGame {
         return this.player2;
     }
 
-    setUsernamePlayer2(usernamePlayer2){
-        this.usernamePlayer2 = usernamePlayer2;
+    getLastAccess(){
+        return this.lastAccess;
     }
 
-    setcheckForPlayer2Time(date){
-        this.checkForPlayer2Time = date;
+    setUsernamePlayer2(usernamePlayer2){
+        this.usernamePlayer2 = usernamePlayer2;
     }
 
     setPlayer1(player){
@@ -46,6 +46,10 @@ class MultiplayerGame {
     setPlayer2Position(x,y){
         this.x2 = x;
         this.y2 = y;
+    }
+
+    setLastAcces(){
+        this.lastAccess = Date.now();
     }
 
     getPlayer1Coord(){

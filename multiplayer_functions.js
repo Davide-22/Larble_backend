@@ -50,8 +50,7 @@ function checkForPlayer2(req, res){
     console.log("[checkForPlayer2] Checking for player 2...");
     game = multiplayer_games[req.body.game_code];
     if(game.getPlayer2() == null){
-        
-        game.setcheckForPlayer2Time(Date.now());
+        game.setLastAcces();
         return res.send({status: false, msg: "player 2 not found"});
     }else{
         return res.send({status: true, msg: "player 2 found"});
@@ -112,6 +111,7 @@ function handleMultiplayerGame(req, res){
         y = req.body.y;
         console.log(`x=${x}, y=${y}`);
         if(email == game.getPlayer1()){
+            game.setLastAcces();
             if(game.isPlayer2Win){
                 return res.send({status: true, win: true});
             }
@@ -263,7 +263,17 @@ function winningGame(req, res, client){
     }   
 }
 
-
+function checkForLeftGames(){
+    Object.keys(multiplayer_games).forEach(function(game_code) {
+        var seconds = (Date.now() - multiplayer_games[game_code].getLastAccess()) / 1000;
+        if(seconds >= 20){
+            game_codes.splice(game_codes.indexOf(game_code), 1);
+            delete multiplayer_games[game_code];
+            console.log(`[checkForLeftGames] Deleting game with code ${game_code}`);
+        }
+    })
+    
+}
 
 module.exports = {
     createMultiplayerGame, 
@@ -272,5 +282,6 @@ module.exports = {
     joinGame,
     deleteGame,
     deleteFinishedGame,
-    winningGame
+    winningGame,
+    checkForLeftGames
 }
