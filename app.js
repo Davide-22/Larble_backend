@@ -97,4 +97,4 @@ app.listen(PORT, ()=>{
 });
 
 
-setInterval(multiplayer.checkForLeftGames(), 5000);
+setInterval(multiplayer.checkForLeftGames, 5000);
