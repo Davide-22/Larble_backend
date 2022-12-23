@@ -194,7 +194,7 @@ function getLeaderboard(req, res, client){
     try{
         const decode = jwt.verify(token, KEY);
         email = decode.email;
-        client.query('SELECT username, score, wins FROM Players ORDER BY score DESC LIMIT 15', [])
+        client.query('SELECT username, score, wins, profile_picture FROM Players ORDER BY score DESC LIMIT 15', [])
             .then(result => {
                 tosend = {
                     status : true,
