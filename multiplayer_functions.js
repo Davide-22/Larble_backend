@@ -28,7 +28,8 @@ function createMultiplayerGame(req, res, client){
                         }
                     }
                     console.log(game_codes);
-                    const game = new multiplayer.MultiplayerGame(email, null);
+                    labyrinth = req.body.labyrinth;
+                    const game = new multiplayer.MultiplayerGame(email, null, labyrinth);
                     multiplayer_games[game_code] = game;
                     return res.send({status: true, msg: game_code});
                 }else{
@@ -77,7 +78,8 @@ function joinGame(req, res, client){
                         }
                         multiplayer_games[game_code].setUsernamePlayer2(result.rows[0].username);
                         multiplayer_games[game_code].setPlayer2(email);
-                        return res.send({status: true, msg: "ok"});
+                        labyrinth = multiplayer_games[game_code].getLabyrinth();
+                        return res.send({status: true, msg: "ok", labyrinth: labyrinth});
                     }else{
                         console.log("[joinGame] Wrong code");
                         return res.send({status: false, msg: "Wrong code"});

@@ -1,10 +1,11 @@
 class MultiplayerGame {
     
-    constructor(player1, player2) {
+    constructor(player1, player2, labyrinth) {
         this.player1 = player1;
         this.player2 = player2;
         this.usernamePlayer2 = null;
         this.lastAccess = Date.now();
+        this.labyrinth = labyrinth;
         this.x1 = 0.0;
         this.y1 = 0.0;
         this.x2 = 0.0;
@@ -23,6 +24,18 @@ class MultiplayerGame {
 
     getLastAccess(){
         return this.lastAccess;
+    }
+
+    getPlayer1Coord(){
+        return {x : this.x1, y: this.y1};
+    }
+
+    getPlayer2Coord(){
+        return {x: this.x2, y : this.y2}  ;  
+    }
+
+    getLabyrinth(){
+        return this.labyrinth;
     }
 
     setUsernamePlayer2(usernamePlayer2){
@@ -50,14 +63,6 @@ class MultiplayerGame {
 
     setLastAcces(){
         this.lastAccess = Date.now();
-    }
-
-    getPlayer1Coord(){
-        return {x : this.x1, y: this.y1}
-    }
-
-    getPlayer2Coord(){
-        return {x: this.x2, y : this.y2}    
     }
 
     player1Win(){
