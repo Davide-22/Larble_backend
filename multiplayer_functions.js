@@ -243,12 +243,14 @@ function winningGame(req, res, client){
                     score = score-5 WHERE email = $1', [loser])
                 .then(result => {
                     console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
+                    return res.send({status: true, msg: "ok"});
                 })
             }else{
                 client.query('UPDATE Players SET total_games = total_games+1 \
                             WHERE email = $1', [loser])
                 .then(result => {
                     console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
+                    return res.send({status: true, msg: "ok"});
                 })                  
             }
         }) 
