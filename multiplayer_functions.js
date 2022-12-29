@@ -29,7 +29,7 @@ function createMultiplayerGame(req, res, client){
                     }
                     console.log(game_codes);
                     labyrinth = req.body.labyrinth;
-                    const game = new multiplayer.MultiplayerGame(email, null, labyrinth);
+                    const game = new multiplayer.MultiplayerGame(email, labyrinth);
                     multiplayer_games[game_code] = game;
                     return res.send({status: true, msg: game_code});
                 }else{

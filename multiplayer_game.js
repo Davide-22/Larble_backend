@@ -1,15 +1,15 @@
 class MultiplayerGame {
     
-    constructor(player1, player2, labyrinth) {
+    constructor(player1, labyrinth) {
         this.player1 = player1;
-        this.player2 = player2;
+        this.player2 = null;
         this.usernamePlayer2 = null;
         this.lastAccess = Date.now();
         this.labyrinth = labyrinth;
-        this.x1 = 0.0;
-        this.y1 = 0.0;
-        this.x2 = 0.0;
-        this.y2 = 0.0;
+        this.x1 = 0.47045258;
+        this.y1 = 0.8824253;
+        this.x2 = 0.47045258;
+        this.y2 = 0.8824253;
         this.isPlayer1Win = false;
         this.isPlayer2Win = false;
     }
