@@ -111,18 +111,18 @@ function handleMultiplayerGame(req, res){
         y = req.body.y;
         if(email == game.getPlayer1()){
             game.setLastAcces();
+            coord = game.getPlayer2Coord();
             if(game.isPlayer2Win){
-                return res.send({status: true, win: true});
+                return res.send({status: true, win: true, x: coord.x, y : coord.y});
             }
             game.setPlayer1Position(x,y);
-            coord = game.getPlayer2Coord();
             return res.send({status: true, x : coord.x, y : coord.y, win : false });
         }else if(email == game.getPlayer2()){
+            coord = game.getPlayer1Coord();
             if(game.isPlayer1Win){
-                return res.send({status: true, win: true});
+                return res.send({status: true, win: true, x: coord.x, y : coord.y});
             }
             game.setPlayer2Position(x,y);
-            coord = game.getPlayer1Coord();
             return res.send({status: true, x : coord.x, y : coord.y, win : false  });
         }else{
             console.log("[handleMultiplayerGame] email error");
