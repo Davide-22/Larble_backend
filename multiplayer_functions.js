@@ -102,30 +102,27 @@ function joinGame(req, res, client){
 function handleMultiplayerGame(req, res){
     token = req.body.token;
     try{
-        console.log(`token=${token}`);
         const decode = jwt.verify(token, KEY);
         email = decode.email;
         game_code = req.body.game_code;
-        console.log(`game_code=${game_code}`);
-        console.log(`email=${email}`);
+        console.log(`[handleMultiplayerGame] game_code=${game_code}`);
         game = multiplayer_games[game_code];
         x = req.body.x;
         y = req.body.y;
-        console.log(`x=${x}, y=${y}`);
         if(email == game.getPlayer1()){
             game.setLastAcces();
+            coord = game.getPlayer2Coord();
             if(game.isPlayer2Win){
-                return res.send({status: true, win: true});
+                return res.send({status: true, win: true, x: coord.x, y : coord.y});
             }
             game.setPlayer1Position(x,y);
-            coord = game.getPlayer2Coord();
             return res.send({status: true, x : coord.x, y : coord.y, win : false });
         }else if(email == game.getPlayer2()){
+            coord = game.getPlayer1Coord();
             if(game.isPlayer1Win){
-                return res.send({status: true, win: true});
+                return res.send({status: true, win: true, x: coord.x, y : coord.y});
             }
             game.setPlayer2Position(x,y);
-            coord = game.getPlayer1Coord();
             return res.send({status: true, x : coord.x, y : coord.y, win : false  });
         }else{
             console.log("[handleMultiplayerGame] email error");
@@ -246,12 +243,14 @@ function winningGame(req, res, client){
                     score = score-5 WHERE email = $1', [loser])
                 .then(result => {
                     console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
+                    return res.send({status: true, msg: "ok"});
                 })
             }else{
                 client.query('UPDATE Players SET total_games = total_games+1 \
                             WHERE email = $1', [loser])
                 .then(result => {
                     console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
+                    return res.send({status: true, msg: "ok"});
                 })                  
             }
         }) 
