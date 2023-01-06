@@ -16,21 +16,56 @@ function login(req,res,client){
             .then(result => {
                 console.log(result.rows);
                 if(result.rows.length > 0){
+                    if(result.rows[0].password == null) return res.send({status: false, msg:"error"});
                     const d = new Date();
                     let data = {
                         email: email,
                         time: d.toUTCString()
                     }
                     const token = jwt.sign(data, KEY);
-                    res.send({status: true, msg: token, username: result.rows[0].username});
+                    return res.send({status: true, msg: token, username: result.rows[0].username});
                 }else{
-                    return res.send({status: false, msg:"wrong email or password"});
+                    return res.send({status: false, msg:"Wrong email or password"});
                 }
             })
             .catch(err => {
                 console.log(err.toString());
                 return res.send({status: false, msg:"error"});
                 
+            })
+}
+
+function googleLogin(req,res,client){
+    console.log("POST /google_login " + req.body.email);
+    email = req.body.email;
+    username = req.body.username;
+    profile_picture = req.body.profile_picture;
+    client.query('SELECT * FROM Players WHERE email = $1', [email])
+            .then(result => {
+                if(result.rows.length > 0 && result.rows[0].password != null){
+                    res.send({status: false, msg:"The user already exists"});
+                }else{
+                    client.query('INSERT INTO Players(email, password, username, wins, total_games, score, profile_picture) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                    [email, null, username, 0, 0, 0, profile_picture])
+                        .then(result => {
+                            console.log("Created a new google user, email: " + req.body.email);
+                        })
+                        .catch(err => {
+                            console.log(err.toString());
+                            return res.send({status: false, msg:"error"});  
+                        })
+                }
+                const d = new Date();
+                let data = {
+                    email: email,
+                    time: d.toUTCString()
+                }
+                const token = jwt.sign(data, KEY);
+                return res.send({status: true, msg: token, username: result.rows[0].username});
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
             })
 }
 
@@ -223,6 +258,7 @@ module.exports = {
     changeUsername,
     changeProfilePicture,
     playerInfo,
-    getLeaderboard
+    getLeaderboard,
+    googleLogin
 }
 

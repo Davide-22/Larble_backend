@@ -31,6 +31,10 @@ app.post('/login',jsonParser, function (req, res) {
     f.login(req, res, client);
 });
 
+app.post('/google_login',jsonParser, function (req, res) {
+    f.googleLogin(req, res, client);
+});
+
 app.post('/signup',jsonParser, function (req, res) {
     f.signup(req, res, client);
 });
