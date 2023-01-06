@@ -42,8 +42,8 @@ function googleLogin(req,res,client){
     profile_picture = req.body.profile_picture;
     client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {
-                if(result.rows.length > 0 && result.rows[0].password != null){
-                    res.send({status: false, msg:"The user already exists"});
+                if(result.rows.length > 0 ){
+                    if(result.rows[0].password != null) return res.send({status: false, msg:"The user already exists"});
                 }else{
                     client.query('INSERT INTO Players(email, password, username, wins, total_games, score, profile_picture) VALUES ($1, $2, $3, $4, $5, $6, $7)',
                     [email, null, username, 0, 0, 0, profile_picture])
