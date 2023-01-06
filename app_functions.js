@@ -40,6 +40,7 @@ function googleLogin(req,res,client){
     email = req.body.email;
     username = req.body.username;
     profile_picture = req.body.profile_picture;
+    console.log(email, username);
     client.query('SELECT * FROM Players WHERE email = $1', [email])
             .then(result => {
                 if(result.rows.length > 0 && result.rows[0].password != null){
