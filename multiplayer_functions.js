@@ -189,12 +189,14 @@ function deleteFinishedGame(req, res, client){
                         game_codes.splice(game_codes.indexOf(game_code), 1);
                         delete multiplayer_games[game_code];
                         console.log(`[deleteFinishedGame] Deleting game with code ${game_code}`); 
+                        return res.send({status: true, msg:"OK"});
                     }else{
                         console.log(`[deleteFinishedGame] ${email} is trying to delete a game that hasn't finished yet`);
                         return res.send({status: false, msg:"error"});
                     }
                 }else{
                     console.log("[deleteFinishedGame] Player not found");
+                    return res.send({status: false, msg: "error"});
                 }
                 
             })
