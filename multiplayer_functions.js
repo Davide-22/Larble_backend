@@ -222,6 +222,7 @@ function winningGame(req, res, client){
         }else if(email == game.getPlayer2()){
             winner = game.getPlayer2()
             loser = email
+            game.player2Win();
         }else{
             return res.send({status: false, msg:"error"});
         }
