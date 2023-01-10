@@ -105,10 +105,10 @@ function handleMultiplayerGame(req, res){
         const decode = jwt.verify(token, KEY);
         email = decode.email;
         game_code = req.body.game_code;
-        console.log(`[handleMultiplayerGame] game_code=${game_code}`);
         game = multiplayer_games[game_code];
         x = req.body.x;
         y = req.body.y;
+        console.log(`[handleMultiplayerGame] game_code=${game_code}, player=${email}, x=${x}, y=${y}`);
         if(email == game.getPlayer1()){
             game.setLastAcces();
             coord = game.getPlayer2Coord();
