@@ -273,7 +273,7 @@ function winningGame(req, res, client){
                 return res.send({status: false, msg:"error"});
             })
         }else{
-            return res.send({status: true, msg: "ok"});
+            return res.send({status: true, msg: "lost"});
         }
     }catch(error) {
         console.log(error.toString());
