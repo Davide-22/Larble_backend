@@ -112,6 +112,7 @@ function handleMultiplayerGame(req, res){
         if(email == game.getPlayer1()){
             game.setLastAcces();
             coord = game.getPlayer2Coord();
+            console.log(`[handleMultiplayerGame] win=${game.isPlayer2Win}`);
             if(game.isPlayer2Win){
                 return res.send({status: true, win: true, x: coord.x, y : coord.y});
             }
@@ -119,6 +120,7 @@ function handleMultiplayerGame(req, res){
             return res.send({status: true, x : coord.x, y : coord.y, win : false });
         }else if(email == game.getPlayer2()){
             coord = game.getPlayer1Coord();
+            console.log(`[handleMultiplayerGame] win=${game.isPlayer1Win}`);
             if(game.isPlayer1Win){
                 return res.send({status: true, win: true, x: coord.x, y : coord.y});
             }
@@ -221,10 +223,12 @@ function winningGame(req, res, client){
             winner = email
             loser = game.getPlayer2()
             game.player1Win();
+            console.log(`[winningGame] player=${email}, win=${game.isPlayer1Win}`);
         }else if(email == game.getPlayer2()){
             winner = game.getPlayer2()
             loser = email
             game.player2Win();
+            console.log(`[winningGame] player=${email}, win=${game.isPlayer2Win}`);
         }else{
             return res.send({status: false, msg:"error"});
         }
