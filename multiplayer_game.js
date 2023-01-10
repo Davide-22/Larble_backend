@@ -6,10 +6,10 @@ class MultiplayerGame {
         this.usernamePlayer2 = null;
         this.lastAccess = Date.now();
         this.labyrinth = labyrinth;
-        this.x1 = 0.47045258;
-        this.y1 = 0.8824253;
-        this.x2 = 0.47045258;
-        this.y2 = 0.8824253;
+        this.x1 = 0.49026123;
+        this.y1 = 0.7898653;
+        this.x2 = 0.49026123;
+        this.y2 = 0.7898653;
         this.isPlayer1Win = false;
         this.isPlayer2Win = false;
     }
