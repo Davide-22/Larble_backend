@@ -223,16 +223,16 @@ function winningGame(req, res, client){
         game = multiplayer_games[game_code];
         if(email == game.getPlayer1()){
             if(!game.isPlayer2Win){
+                game.player1Win();
                 winner = email;
                 loser = game.getPlayer2();
-                game.player1Win();
                 console.log(`[winningGame] player=${email}, win=${game.isPlayer1Win}`);
             }
         }else if(email == game.getPlayer2()){
-            if(!game.isPlayer1Win()){
+            if(!game.isPlayer1Win){
+                game.player2Win();
                 winner = email;
                 loser = game.getPlayer1();
-                game.player2Win();
                 console.log(`[winningGame] player=${email}, win=${game.isPlayer2Win}`);
             }
         }else{
