@@ -272,8 +272,9 @@ function winningGame(req, res, client){
                 console.log(err.toString());
                 return res.send({status: false, msg:"error"});
             })
+        }else{
+            return res.send({status: true, msg: "ok"});
         }
-        return res.send({status: true, msg: "ok"});
     }catch(error) {
         console.log(error.toString());
         return res.send({status: false, msg:"error"});
