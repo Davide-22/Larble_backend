@@ -214,57 +214,66 @@ function deleteFinishedGame(req, res, client){
 
 function winningGame(req, res, client){
     token = req.body.token;
+    winner = null;
+    loser = null;
     try{
         const decode = jwt.verify(token, KEY);
         email = decode.email;
         game_code = req.body.game_code;
         game = multiplayer_games[game_code];
         if(email == game.getPlayer1()){
-            winner = email
-            loser = game.getPlayer2()
-            game.player1Win();
-            console.log(`[winningGame] player=${email}, win=${game.isPlayer1Win}`);
+            if(!game.isPlayer2Win){
+                winner = email;
+                loser = game.getPlayer2();
+                game.player1Win();
+                console.log(`[winningGame] player=${email}, win=${game.isPlayer1Win}`);
+            }
         }else if(email == game.getPlayer2()){
-            winner = game.getPlayer2()
-            loser = email
-            game.player2Win();
-            console.log(`[winningGame] player=${email}, win=${game.isPlayer2Win}`);
+            if(!game.isPlayer1Win()){
+                winner = email;
+                loser = game.getPlayer1();
+                game.player2Win();
+                console.log(`[winningGame] player=${email}, win=${game.isPlayer2Win}`);
+            }
         }else{
             return res.send({status: false, msg:"error"});
         }
+        if(winner!=null && loser!=null){
             
-        client.query('UPDATE Players SET wins = wins+1, \
+            client.query('UPDATE Players SET wins = wins+1, \
                     total_games = total_games+1, \
                     score = score+10 WHERE email = $1', [winner])
-        .then(result => {
-            console.log(`[winningGame] ${winner} won the game, wins, score and total_games updated`);
-        })
-        .catch(err => {
-            console.log(err.toString());
-            return res.send({status: false, msg:"error"});
-        })
-        client.query('SELECT score FROM Players WHERE email=$1', [loser])
-        .then(result => {
-            if(result.rows[0].score >= 5){
-                client.query('UPDATE Players SET total_games = total_games+1, \
-                    score = score-5 WHERE email = $1', [loser])
-                .then(result => {
-                    console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
-                    return res.send({status: true, msg: "ok"});
-                })
-            }else{
-                client.query('UPDATE Players SET total_games = total_games+1 \
-                            WHERE email = $1', [loser])
-                .then(result => {
-                    console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
-                    return res.send({status: true, msg: "ok"});
-                })                  
-            }
-        }) 
-        .catch(err => {
-            console.log(err.toString());
-            return res.send({status: false, msg:"error"});
-        })
+            .then(result => {
+                console.log(`[winningGame] ${winner} won the game, wins, score and total_games updated`);
+            })
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
+            })
+            client.query('SELECT score FROM Players WHERE email=$1', [loser])
+            .then(result => {
+                if(result.rows[0].score >= 5){
+                    client.query('UPDATE Players SET total_games = total_games+1, \
+                        score = score-5 WHERE email = $1', [loser])
+                    .then(result => {
+                        console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
+                        return res.send({status: true, msg: "ok"});
+                    })
+                }else{
+                    client.query('UPDATE Players SET total_games = total_games+1 \
+                                WHERE email = $1', [loser])
+                    .then(result => {
+                        console.log(`[winningGame] ${loser} lost the game, score and total_games updated`);
+                        return res.send({status: true, msg: "ok"});
+                    })                  
+                }
+            }) 
+            .catch(err => {
+                console.log(err.toString());
+                return res.send({status: false, msg:"error"});
+            })
+        }
+        return res.send({status: true, msg: "ok"});
     }catch(error) {
         console.log(error.toString());
         return res.send({status: false, msg:"error"});
